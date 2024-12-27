@@ -28,19 +28,19 @@ class model_detail():
 
 
 class basic_model_comparison():
-    def __init__(self, train, tar_col, metric = r2_score, ascend = True, model_list = set()):
+    def __init__(self, train, tar_col, metric = r2_score, ascend = True, model_list = []):
         X = train.drop(columns = tar_col)
         y = train[tar_col]
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(X, y, test_size=0.3, random_state=1453)
         self.tar_col = tar_col
-        self.models = set()
+        self.models = []
         self.metric = metric
         self.ascend = ascend
         if len(model_list) == 0:
             from sklearn.linear_model import LinearRegression
             from sklearn.tree import DecisionTreeRegressor
-            model_list.add(LinearRegression())
-            model_list.add(DecisionTreeRegressor(random_state=42))
+            model_list.append(LinearRegression())
+            model_list.append(DecisionTreeRegressor(random_state=42))
         else:
             self.model_list = model_list
 
@@ -52,7 +52,7 @@ class basic_model_comparison():
         y_pred = model.predict(self.X_test)
         metric = self.metric(self.y_test, y_pred)
         md = model_detail(type(model), model, metric, self.metric, self.ascend)
-        self.models.add(md)
+        self.models.append(md)
 
     
 
